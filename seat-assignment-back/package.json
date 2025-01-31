@@ -4,7 +4,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "name": "backend",
+  "name": "seat-assignment-back-ssafy-13",
   "version": "1.0.0",
   "main": "app.js",
   "keywords": [],

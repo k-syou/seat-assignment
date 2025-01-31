@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../assets/PretendardVariable.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'Pretendard', sans-serif;
+}
+
 .navigation {
   background-color: #f8f9fa;
   padding: 1rem;
@@ -30,7 +41,7 @@
 }
 
 .navigation a.router-link-active {
-  color: #007bff;
+  color: #345DA7;
   background-color: #e9ecef;
 }
 

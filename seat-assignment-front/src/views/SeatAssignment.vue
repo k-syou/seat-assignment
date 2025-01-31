@@ -86,7 +86,10 @@ const occupiedSeats = ref(new Map())
 const disabledSeats = ref([
   // 여기에 비활성화할 좌석 위치를 추가
   { row: 1, col: 2 },
-  { row: 2, col: 3 },
+  { row: 2, col: 1 },
+  { row: 3, col: 3 },
+  { row: 4, col: 2 },
+  { row: 5, col: 5 },
 ])
 
 const previousLayout = ref(new Map())
@@ -144,47 +147,99 @@ const assignWeightedSeats = () => {
 
   const shuffledStudents = shuffleArray([...students.value])
 
-  shuffledStudents.forEach((student) => {
-    const weights = calculateWeight(student)
-    const random = Math.random()
+  shuffledStudents.forEach((student, index) => {
+    setTimeout(() => {
+      const weights = calculateWeight(student)
+      const random = Math.random()
 
-    let selectedSeat = null
+      let selectedSeat = null
 
-    // 가중치에 따라 자리 선택
-    if (random < weights.frontWeight && frontSeats.length > 0) {
-      const index = Math.floor(Math.random() * frontSeats.length)
-      selectedSeat = frontSeats.splice(index, 1)[0]
-    } else if (random < weights.frontWeight + weights.backWeight && backSeats.length > 0) {
-      const index = Math.floor(Math.random() * backSeats.length)
-      selectedSeat = backSeats.splice(index, 1)[0]
-    } else if (middleSeats.length > 0) {
-      const index = Math.floor(Math.random() * middleSeats.length)
-      selectedSeat = middleSeats.splice(index, 1)[0]
-    }
-    // 선택된 자리가 없으면 남은 자리 중에서 무작위 선택
-    if (!selectedSeat) {
-      const remainingSeats = [...frontSeats, ...middleSeats, ...backSeats]
-      if (remainingSeats.length > 0) {
-        const index = Math.floor(Math.random() * remainingSeats.length)
-        selectedSeat = remainingSeats[index][
-          // 선택된 자리를 해당 배열에서 제거
-          (frontSeats, middleSeats, backSeats)
-        ].forEach((array) => {
-          const idx = array.findIndex(
-            (seat) => seat.row === selectedSeat.row && seat.col === selectedSeat.col,
-          )
-          if (idx !== -1) array.splice(idx, 1)
-        })
+      // 가중치에 따라 자리 선택
+      if (random < weights.frontWeight && frontSeats.length > 0) {
+        const index = Math.floor(Math.random() * frontSeats.length)
+        selectedSeat = frontSeats.splice(index, 1)[0]
+      } else if (random < weights.frontWeight + weights.backWeight && backSeats.length > 0) {
+        const index = Math.floor(Math.random() * backSeats.length)
+        selectedSeat = backSeats.splice(index, 1)[0]
+      } else if (middleSeats.length > 0) {
+        const index = Math.floor(Math.random() * middleSeats.length)
+        selectedSeat = middleSeats.splice(index, 1)[0]
       }
-    }
+      // 선택된 자리가 없으면 남은 자리 중에서 무작위 선택
+      if (!selectedSeat) {
+        const remainingSeats = [...frontSeats, ...middleSeats, ...backSeats]
+        if (remainingSeats.length > 0) {
+          const index = Math.floor(Math.random() * remainingSeats.length)
+          selectedSeat = remainingSeats[index]
+          // 선택된 자리를 해당 배열에서 제거
+          ;[frontSeats, middleSeats, backSeats].forEach((array) => {
+            const idx = array.findIndex(
+              (seat) => seat.row === selectedSeat.row && seat.col === selectedSeat.col,
+            )
+            if (idx !== -1) array.splice(idx, 1)
+          })
+        }
+      }
 
-    if (selectedSeat) {
-      occupiedSeats.value.set(`${selectedSeat.row}-${selectedSeat.col}`, student)
-    }
+      if (selectedSeat) {
+        occupiedSeats.value.set(`${selectedSeat.row}-${selectedSeat.col}`, student)
+        occupiedSeats.value = new Map(occupiedSeats.value)
+      }
+    }, index * (300 - index * 8)) // 500ms 지연 (필요에 따라 조정 가능)
   })
-
-  occupiedSeats.value = new Map(occupiedSeats.value)
 }
+// const assignWeightedSeats = () => {
+//   clearSeats()
+//   const availableSeats = getAvailableSeats()
+//   const frontSeats = availableSeats.filter((seat) => FRONT_ROWS.includes(seat.row))
+//   const backSeats = availableSeats.filter((seat) => BACK_ROWS.includes(seat.row))
+//   const middleSeats = availableSeats.filter(
+//     (seat) => !FRONT_ROWS.includes(seat.row) && !BACK_ROWS.includes(seat.row),
+//   )
+
+//   const shuffledStudents = shuffleArray([...students.value])
+
+//   shuffledStudents.forEach((student) => {
+//     const weights = calculateWeight(student)
+//     const random = Math.random()
+
+//     let selectedSeat = null
+
+//     // 가중치에 따라 자리 선택
+//     if (random < weights.frontWeight && frontSeats.length > 0) {
+//       const index = Math.floor(Math.random() * frontSeats.length)
+//       selectedSeat = frontSeats.splice(index, 1)[0]
+//     } else if (random < weights.frontWeight + weights.backWeight && backSeats.length > 0) {
+//       const index = Math.floor(Math.random() * backSeats.length)
+//       selectedSeat = backSeats.splice(index, 1)[0]
+//     } else if (middleSeats.length > 0) {
+//       const index = Math.floor(Math.random() * middleSeats.length)
+//       selectedSeat = middleSeats.splice(index, 1)[0]
+//     }
+//     // 선택된 자리가 없으면 남은 자리 중에서 무작위 선택
+//     if (!selectedSeat) {
+//       const remainingSeats = [...frontSeats, ...middleSeats, ...backSeats]
+//       if (remainingSeats.length > 0) {
+//         const index = Math.floor(Math.random() * remainingSeats.length)
+//         selectedSeat = remainingSeats[index][
+//           // 선택된 자리를 해당 배열에서 제거
+//           (frontSeats, middleSeats, backSeats)
+//         ].forEach((array) => {
+//           const idx = array.findIndex(
+//             (seat) => seat.row === selectedSeat.row && seat.col === selectedSeat.col,
+//           )
+//           if (idx !== -1) array.splice(idx, 1)
+//         })
+//       }
+//     }
+
+//     if (selectedSeat) {
+//       occupiedSeats.value.set(`${selectedSeat.row}-${selectedSeat.col}`, student)
+//     }
+//   })
+
+//   occupiedSeats.value = new Map(occupiedSeats.value)
+// }
 
 const layouts = ref([]) // 저장된 배치도 목록
 const selectedLayoutName = ref('') // 새 배치도 저장 시 이름
@@ -264,8 +319,11 @@ const assignRandomSeats = () => {
 
   shuffledStudents.forEach((student, index) => {
     if (index < availableSeats.length) {
-      const seat = availableSeats[index]
-      occupiedSeats.value.set(`${seat.row}-${seat.col}`, student)
+      setTimeout(() => {
+        const seat = availableSeats[index]
+        occupiedSeats.value.set(`${seat.row}-${seat.col}`, student)
+        occupiedSeats.value = new Map(occupiedSeats.value)
+      }, index * 100)
     }
   })
 
@@ -334,18 +392,18 @@ onMounted(async () => {
 }
 
 .seat:hover {
-  border-color: #007bff;
+  border-color: #4bb4de;
   background-color: #f8f9fa;
 }
 
 .seat-occupied {
-  background-color: #007bff;
+  background-color: #4bb4de;
   color: white;
-  border-color: #0056b3;
+  border-color: #398AC4;
 }
 
 .seat-occupied:hover {
-  background-color: #0056b3;
+  background-color: #398AC4;
 }
 
 .seat-disabled {
@@ -369,7 +427,7 @@ onMounted(async () => {
 
 .control-button {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #398AC4;
   color: white;
   border: none;
   border-radius: 4px;
@@ -380,7 +438,7 @@ onMounted(async () => {
 }
 
 .control-button:hover {
-  background-color: #0056b3;
+  background-color: #345da7;
 }
 
 .seat {

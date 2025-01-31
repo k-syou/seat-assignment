@@ -16,6 +16,10 @@ app.use(cors())
 
 app.use(express.json())
 
+app.get('/my-ip', async (req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  res.json({ ip });
+});
 // 테스트 라우트 추가
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' })
@@ -28,3 +32,5 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+// module.exports = app;
