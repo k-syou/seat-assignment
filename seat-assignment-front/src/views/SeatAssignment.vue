@@ -54,19 +54,19 @@ import axios from 'axios'
 // students를 ref로 변경
 const students = ref([])
 
-const apiClient = axios.create({
-  baseURL: 'https://seat-assignment-back.vercel.app',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// const apiClient = axios.create({
+//   baseURL: 'https://seat-assignment-back.vercel.app',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// });
 
 // 학생 목록 불러오기
 const loadStudents = async () => {
   try {
-    // const response = await axios.get('/api/students')
+    const response = await axios.get('/api/students')
     // const response = await apiClient.get('/api/students')
-    const response = await axios.get('https://seat-assignment-back.vercel.app/api/students')
+    // const response = await axios.get('https://seat-assignment-back.vercel.app/api/students')
     console.log(response)
     // 받아온 데이터에서 name 속성만 추출
     students.value = response.data.map(student => student.name)
@@ -79,8 +79,8 @@ const loadStudents = async () => {
 
 // localStorage에서 이전 배치 불러오기
 const loadPreviousLayout = async () => {
-  // const response = await axios.get('/api/seating-layouts')
-  const response = await apiClient.get('/api/seating-layouts')
+  const response = await axios.get('/api/seating-layouts')
+  // const response = await apiClient.get('/api/seating-layouts')
   console.log(response)
   if (response) {
     let tmpLayout = new Map()
@@ -257,8 +257,8 @@ const selectedLayoutName = ref('') // 새 배치도 저장 시 이름
 // 서버에서 배치도 목록 불러오기
 const loadLayouts = async () => {
   try {
-    // const response = await axios.get('/api/seating-layouts')
-    const response = await apiClient.get('/api/seating-layouts')
+    const response = await axios.get('/api/seating-layouts')
+    // const response = await apiClient.get('/api/seating-layouts')
     layouts.value = response.data
   } catch (error) {
     console.error('배치도 로딩 실패:', error)
@@ -293,8 +293,8 @@ const saveCurrentLayout = async () => {
 // 특정 배치도 불러오기
 const loadLayout = async (layoutId) => {
   try {
-    // const response = await axios.get(`/api/seating-layouts/${layoutId}`)
-    const response = await apiClient.get(`/api/seating-layouts/${layoutId}`)
+    const response = await axios.get(`/api/seating-layouts/${layoutId}`)
+    // const response = await apiClient.get(`/api/seating-layouts/${layoutId}`)
     occupiedSeats.value = new Map(Object.entries(response.data.layout))
   } catch (error) {
     console.error('배치도 로딩 실패:', error)

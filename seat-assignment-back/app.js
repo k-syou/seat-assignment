@@ -12,11 +12,13 @@ connectDB();
 const app = express()
 
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}))
+// app.use(cors({
+//   origin: '*',
+//   methods: ['GET', 'POST'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// }))
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -29,8 +31,8 @@ app.get('/test', (req, res) => {
   res.json({ message: 'API is working!' })
 })
 
-app.use('/seating-layouts', seatingLayouts)
-app.use('/students', studentsRouter)
+app.use('/api/seating-layouts', seatingLayouts)
+app.use('/api/students', studentsRouter)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

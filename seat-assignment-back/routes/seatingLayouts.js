@@ -1,5 +1,6 @@
 import express from 'express'
-import SeatingLayout from '../models/SeatingLayout.js'
+// import SeatingLayout from '../models/SeatingLayout.js'
+import SeatingLayout from '../schemas/seatingLayouts.js'
 
 const router = express.Router()
 

@@ -17,7 +17,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'https://seat-assignment-back.vercel.app',
+        target: 'https://localhost:3000/',
         changeOrigin: true,
         // pathRewrite: {
         //   '^/api': '',
