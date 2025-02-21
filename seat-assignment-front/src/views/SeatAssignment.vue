@@ -95,11 +95,15 @@ const loadPreviousLayout = async () => {
 const occupiedSeats = ref(new Map())
 const disabledSeats = ref([
   // 여기에 비활성화할 좌석 위치를 추가
-  { row: 1, col: 2 },
+  { row: 1, col: 1 },
   { row: 2, col: 1 },
-  { row: 3, col: 3 },
-  { row: 4, col: 2 },
-  { row: 5, col: 5 },
+  { row: 3, col: 1 },
+  { row: 4, col: 1 },
+  { row: 5, col: 1 },
+  { row: 1, col: 6 },
+  { row: 2, col: 6 },
+  { row: 3, col: 6 },
+  { row: 5, col: 6 },
 ])
 
 const previousLayout = ref(new Map())

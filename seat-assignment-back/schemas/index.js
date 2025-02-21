@@ -8,13 +8,13 @@ const connectDB = async () => {
   try {
     console.log('Attempting to connect to MongoDB...')
     console.log('Connection URI:', mongoURI) // 디버깅용 (실제 배포 시에는 제거)
-    
+
     const conn = await mongoose.connect(mongoURI, {
       dbName: "seat-data",
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
     })
-    
+
     console.log(`MongoDB Connected: ${conn.connection.host}`)
   } catch (error) {
     console.error('MongoDB connection error:')
