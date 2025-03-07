@@ -202,58 +202,6 @@ const assignWeightedSeats = () => {
     }, index * (300 - index * 8)) // 500ms 지연 (필요에 따라 조정 가능)
   })
 }
-// const assignWeightedSeats = () => {
-//   clearSeats()
-//   const availableSeats = getAvailableSeats()
-//   const frontSeats = availableSeats.filter((seat) => FRONT_ROWS.includes(seat.row))
-//   const backSeats = availableSeats.filter((seat) => BACK_ROWS.includes(seat.row))
-//   const middleSeats = availableSeats.filter(
-//     (seat) => !FRONT_ROWS.includes(seat.row) && !BACK_ROWS.includes(seat.row),
-//   )
-
-//   const shuffledStudents = shuffleArray([...students.value])
-
-//   shuffledStudents.forEach((student) => {
-//     const weights = calculateWeight(student)
-//     const random = Math.random()
-
-//     let selectedSeat = null
-
-//     // 가중치에 따라 자리 선택
-//     if (random < weights.frontWeight && frontSeats.length > 0) {
-//       const index = Math.floor(Math.random() * frontSeats.length)
-//       selectedSeat = frontSeats.splice(index, 1)[0]
-//     } else if (random < weights.frontWeight + weights.backWeight && backSeats.length > 0) {
-//       const index = Math.floor(Math.random() * backSeats.length)
-//       selectedSeat = backSeats.splice(index, 1)[0]
-//     } else if (middleSeats.length > 0) {
-//       const index = Math.floor(Math.random() * middleSeats.length)
-//       selectedSeat = middleSeats.splice(index, 1)[0]
-//     }
-//     // 선택된 자리가 없으면 남은 자리 중에서 무작위 선택
-//     if (!selectedSeat) {
-//       const remainingSeats = [...frontSeats, ...middleSeats, ...backSeats]
-//       if (remainingSeats.length > 0) {
-//         const index = Math.floor(Math.random() * remainingSeats.length)
-//         selectedSeat = remainingSeats[index][
-//           // 선택된 자리를 해당 배열에서 제거
-//           (frontSeats, middleSeats, backSeats)
-//         ].forEach((array) => {
-//           const idx = array.findIndex(
-//             (seat) => seat.row === selectedSeat.row && seat.col === selectedSeat.col,
-//           )
-//           if (idx !== -1) array.splice(idx, 1)
-//         })
-//       }
-//     }
-
-//     if (selectedSeat) {
-//       occupiedSeats.value.set(`${selectedSeat.row}-${selectedSeat.col}`, student)
-//     }
-//   })
-
-//   occupiedSeats.value = new Map(occupiedSeats.value)
-// }
 
 const layouts = ref([]) // 저장된 배치도 목록
 const selectedLayoutName = ref('') // 새 배치도 저장 시 이름
@@ -283,8 +231,8 @@ const saveCurrentLayout = async () => {
       layout: Object.fromEntries(occupiedSeats.value),
     }
 
-    // await axios.post('/api/seating-layouts', layoutData)
-    await apiClient.post('/api/seating-layouts', layoutData)
+    await axios.post('/api/seating-layouts', layoutData)
+    // await apiClient.post('/api/seating-layouts', layoutData)
     alert('배치도가 저장되었습니다.')
     await loadLayouts() // 목록 새로고침
     selectedLayoutName.value = '' // 입력 필드 초기화
@@ -298,7 +246,6 @@ const saveCurrentLayout = async () => {
 const loadLayout = async (layoutId) => {
   try {
     const response = await axios.get(`/api/seating-layouts/${layoutId}`)
-    // const response = await apiClient.get(`/api/seating-layouts/${layoutId}`)
     occupiedSeats.value = new Map(Object.entries(response.data.layout))
   } catch (error) {
     console.error('배치도 로딩 실패:', error)
